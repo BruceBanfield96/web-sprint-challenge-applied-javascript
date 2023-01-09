@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const Card = (article) => {
   // TASK 5
   // ---------------------
@@ -17,6 +19,36 @@ const Card = (article) => {
   //   </div>
   // </div>
   //
+const card = document.createElement('div');
+const headline = document.createElement('div');
+const author = document.createElement('div');
+const imgContainer = document.createElement('div');
+const image = document.createElement('img');
+const span = document.createElement('span');
+
+card.classList.add('card');
+headline.classList.add('headline');
+author.classList.add('author');
+imgContainer.classList.add('img-container');
+
+headline.textContent = article.headline;
+image.src = article.authorPhoto;
+span.textContent = article.authorName;
+
+card.appendChild(headline);
+card.appendChild(author);
+author.appendChild(imgContainer);
+imgContainer.appendChild(image);
+author.appendChild(span);
+
+card.addEventListener('click', () => {
+  console.log(article.headline);
+})
+
+return card;
+
+
+
 }
 
 const cardAppender = (selector) => {
@@ -28,6 +60,39 @@ const cardAppender = (selector) => {
   // Create a card from each and every article object in the response, using the Card component.
   // Append each card to the element in the DOM that matches the selector passed to the function.
   //
+const cssSelector = document.querySelector(selector);
+
+axios.get(`http://localhost:5001/api/articles`)
+.then(response => {
+  const javascriptData = response.data.articles.javascript
+  javascriptData.forEach(element => {
+    cssSelector.appendChild(Card(element))
+  })
+
+  const bootstrapData = response.data.articles.bootstrap
+  bootstrapData.forEach(element => {
+    cssSelector.appendChild(Card(element))
+  })
+
+  const technologyData = response.data.articles.technology
+  technologyData.forEach(element => {
+    cssSelector.appendChild(Card(element))
+  })
+
+  const jqueryData = response.data.articles.jquery
+  jqueryData.forEach(element => {
+    cssSelector.appendChild(Card(element))
+  })
+
+  const nodeData = response.data.articles.node
+  nodeData.forEach(element => {
+    cssSelector.appendChild(Card(element))
+  })
+  .catch(err => console.error(err))
+
+})
+
 }
+
 
 export { Card, cardAppender }
